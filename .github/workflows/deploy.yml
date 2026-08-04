@@ -46,6 +46,15 @@ jobs:
             echo "flag=" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Diagnose token scope
+        run: |
+          echo "--- whoami ---"
+          vercel whoami --token=${{ secrets.VERCEL_TOKEN }} || true
+          echo "--- teams ---"
+          vercel teams ls --token=${{ secrets.VERCEL_TOKEN }} || true
+          echo "--- projects (org scope) ---"
+          vercel project ls --token=${{ secrets.VERCEL_TOKEN }} || true
+
       - name: Pull Vercel environment
         run: vercel pull --yes --environment=${{ steps.target.outputs.env }} --token=${{ secrets.VERCEL_TOKEN }}
 
